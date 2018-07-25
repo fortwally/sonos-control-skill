@@ -10,7 +10,7 @@
 from adapt.intent import IntentBuilder
 from mycroft import MycroftSkill, intent_file_handler
 from mycroft.util.log import LOG
-import sonosCtl as SC
+import sonosctl as SC
 
 __author__ = 'fortwally'
 
@@ -23,10 +23,17 @@ class SonosControl(MycroftSkill):
 
         # Initialize working variables used within the skill.
         self.count = 0
+        work = SC.findspeakers()
+        LOGGER.debug("Found Speakers {}".format(word[0]))
+        self.need_speakers = work[0] # 1 no speakers
+        self.coordinator = work[1] # the coordinator
+        self.ip_address = self.coordinator.ip_address # python object
+        self.settings['coordinator_ip']=self.ip_address
 
     @intent_file_handler('control.sonos.intent')
     def handle_control_sonos(self, message):
         self.speak_dialog('control.sonos')
+
 
     # The "handle_xxxx_intent" function is triggered by Mycroft when the
     # skill's intent is matched.  The intent is defined by the IntentBuilder()
@@ -44,11 +51,34 @@ class SonosControl(MycroftSkill):
         # In this case, respond by simply speaking a canned response.
         # Mycroft will randomly speak one of the lines from the file
         #    dialogs/en-us/hello.world.dialog
-        status = SC.findspeakers()
+        if self.need_speakers:
+            self.speak_dialog("No speakers found")
+            return
+        try:
+            SC.play(self.coordinator)
+        except:
+            needspeakers()
 
     @intent_handler(IntentBuilder("").require("Sonos").require("pause"))
     def handle_sonos_pause_intent(self, message):
-        pass
+        if self.need_speakers:
+            self.speak_dialog("No speakers found") 
+            return
+        try:
+            SC.pause(self.coordinator)
+        except:
+            needspeakers()
+
+    def needSpeakers(self)
+        self.speak_dialog("need to find speakers")
+        try:
+            coordinator = SC.rescan(self.ip_address)
+        except:
+            coorinator = SC.rescan(self.settings.get('coordinatr_ip')
+
+    @intent_handler(IntentBuilder("").require("Sonos").require("stop")
+    def handle_sonos_stop_intent(self, message)
+        SC.pause(SC.coordinator)
 
 
     # The "stop" method defines what Mycroft does when told to stop during
@@ -56,6 +86,10 @@ class SonosControl(MycroftSkill):
     # is extremely simple, there is no need to override it.  If you DO
     # need to implement stop, you should return True to indicate you handled
     # it.
+    def stop(self, message)
+        pass
+
+        
 
 def create_skill():
     return SonosControl()

@@ -3,12 +3,18 @@ import soco
 # Find the speakers return the controler
 def findspeakers():
     speakers = soco.discover()
-    if speakers == none :
+    if len(speakers) == 0 :
         return [1, "no.sonos.speakers"]
     spk = speakers.pop()
     group = spk.group
     coordinator = group.coordinator
     return [0, coordinator]
+
+# Called if coordinator object is not valid
+# try using old IP address
+def rescan(ip):
+    coordinator = soco.SoCo(ip)
+    return coordinator
 
 # Will see if can pass object around.
 #Start continue playing whatever was playing
