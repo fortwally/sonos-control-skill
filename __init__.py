@@ -24,7 +24,7 @@ class SonosControl(MycroftSkill):
         # Initialize working variables used within the skill.
         self.count = 0
         work = SC.findspeakers()
-        LOGGER.debug("Found Speakers {}".format(word[0]))
+        LOG.debug("Found Speakers {}".format(word[0]))
         self.need_speakers = work[0] # 1 no speakers
         self.coordinator = work[1] # the coordinator
         self.ip_address = self.coordinator.ip_address # python object
@@ -55,6 +55,7 @@ class SonosControl(MycroftSkill):
             self.speak_dialog("No speakers found")
             return
         try:
+            LOG.debug("In Play Intent")
             SC.play(self.coordinator)
         except:
             needspeakers()
@@ -65,6 +66,7 @@ class SonosControl(MycroftSkill):
             self.speak_dialog("No speakers found") 
             return
         try:
+            LOG.debug("In Pause Intent")
             SC.pause(self.coordinator)
         except:
             needspeakers()
@@ -78,7 +80,7 @@ class SonosControl(MycroftSkill):
 
     @intent_handler(IntentBuilder("").require("Sonos").require("stop")
     def handle_sonos_stop_intent(self, message)
-        SC.pause(SC.coordinator)
+        SC.pause(self.coordinator)
 
 
     # The "stop" method defines what Mycroft does when told to stop during
