@@ -1,11 +1,30 @@
-# TODO: Add an appropriate license to your skill before publishing.  See
-# the LICENSE file for more information.
+"""
+The MIT License (MIT)   
 
-# Below is the list of outside modules you'll be using in your skill.
+Copyright (c) 2018 Wally Fort
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+"""
+
+# Below is the list of outside modules used in the skill.
 # They might be built-in to Python, from mycroft-core or from external
-# libraries.  If you use an external library, be sure to include it
-# in the requirements.txt file so the library is installed properly
-# when the skill gets installed later by a user.
+# libraries.
 # Added soco to requirments.txt
 from adapt.intent import IntentBuilder
 from mycroft import MycroftSkill, intent_file_handler
@@ -29,6 +48,7 @@ class SonosControl(MycroftSkill):
         self.coordinator = work[1] # the coordinator
         self.ip_address = self.coordinator.ip_address # python object
         self.settings['coordinator_ip']=self.ip_address
+        LOG.debug('Coordinator IP is {}'.format(self.ip_address))
 
     @intent_file_handler('control.sonos.intent')
     def handle_control_sonos(self, message):
@@ -46,11 +66,10 @@ class SonosControl(MycroftSkill):
     #   'Hello world'
     #   'Howdy you great big world'
     #   'Greetings planet earth'
+
+    # Continue playing whatever was playing before play was pasued.
     @intent_handler(IntentBuilder("").require("Sonos").require("Play"))
     def handle_sonos_play_intent(self, message):
-        # In this case, respond by simply speaking a canned response.
-        # Mycroft will randomly speak one of the lines from the file
-        #    dialogs/en-us/hello.world.dialog
         if self.need_speakers:
             self.speak_dialog("No speakers found")
             return
@@ -60,6 +79,7 @@ class SonosControl(MycroftSkill):
         except:
             needspeakers()
 
+    # Pause whatever is playing.
     @intent_handler(IntentBuilder("").require("Sonos").require("pause"))
     def handle_sonos_pause_intent(self, message):
         if self.need_speakers:
@@ -72,12 +92,13 @@ class SonosControl(MycroftSkill):
             needspeakers()
 
     def needSpeakers(self):
-        self.speak_dialog("need to find speakers")
+        self.speak_dialog("Need to find speakers")
         try:
             coordinator = SC.rescan(self.ip_address)
         except:
             coorinator = SC.rescan(self.settings.get('coordinatr_ip')
 
+    # Handle this the same a a pause
     @intent_handler(IntentBuilder("").require("Sonos").require("stop")
     def handle_sonos_stop_intent(self, message)
         SC.pause(self.coordinator)
