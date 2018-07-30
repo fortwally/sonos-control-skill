@@ -100,7 +100,7 @@ class SonosControl(MycroftSkill):
 
     # Handle this the same a a pause
     @intent_handler(IntentBuilder("").require("Sonos").require("stop")
-    def handle_sonos_stop_intent(self, message)
+    def handle_sonos_stop_intent(self, message):
         SC.pause(self.coordinator)
 
 
@@ -109,7 +109,7 @@ class SonosControl(MycroftSkill):
     # is extremely simple, there is no need to override it.  If you DO
     # need to implement stop, you should return True to indicate you handled
     # it.
-    def stop(self, message)
+    def stop(self, message):
         pass
 
         
