@@ -29,7 +29,7 @@ SOFTWARE.
 from adapt.intent import IntentBuilder
 from mycroft import MycroftSkill, intent_file_handler, intent_handler
 from mycroft.util.log import getLogger, LOG
-import sonosctl as SC
+import soco
 
 __author__ = 'fortwally'
 
@@ -112,6 +112,30 @@ class SonosControl(MycroftSkill):
             coordinator = SC.rescan(self.ip_address)
         except:
             coorinator = SC.rescan(self.settings.get('coordinatr_ip'))
+
+# Find the speakers return the controler
+def findspeakers():
+    speakers = soco.discover()
+    if len(speakers) == 0 :
+        return [1, "no.sonos.speakers"]
+    spk = speakers.pop()
+    group = spk.group
+    coordinator = group.coordinator
+    return [0, coordinator]
+
+# Called if coordinator object is not valid
+# try using old IP address
+def rescan(ip):
+    coordinator = soco.SoCo(ip)
+    return coordinator
+
+#Start continue playing whatever was playing
+def play(coordinator):
+    coordinator.play()
+
+#Pause play
+def pause(coordinator):
+    coordinator.pause()
         
 
 def create_skill():
