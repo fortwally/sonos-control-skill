@@ -91,12 +91,6 @@ class SonosControl(MycroftSkill):
         except:
             needspeakers()
 
-    def needSpeakers(self):
-        self.speak_dialog("Need to find speakers")
-        try:
-            coordinator = SC.rescan(self.ip_address)
-        except:
-            coorinator = SC.rescan(self.settings.get('coordinatr_ip')
 
     # Handle this the same a a pause
     @intent_handler(IntentBuilder("").require("Sonos").require("stop")
@@ -112,6 +106,12 @@ class SonosControl(MycroftSkill):
     def stop(self, message):
         pass
 
+    def needSpeakers(self):
+        self.speak_dialog("Need to find speakers")
+        try:
+            coordinator = SC.rescan(self.ip_address)
+        except:
+            coorinator = SC.rescan(self.settings.get('coordinatr_ip'))
         
 
 def create_skill():
