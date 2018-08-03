@@ -27,8 +27,8 @@ SOFTWARE.
 # libraries.
 # Added soco to requirments.txt
 from adapt.intent import IntentBuilder
-from mycroft import MycroftSkill, intent_file_handler
-from mycroft.util.log import LOG
+from mycroft import MycroftSkill, intent_file_handler, intent_handler
+from mycroft.util.log import getLogger, LOG
 import sonosctl as SC
 
 __author__ = 'fortwally'
@@ -93,7 +93,7 @@ class SonosControl(MycroftSkill):
 
 
     # Handle this the same a a pause
-    @intent_handler(IntentBuilder("").require("Sonos").require("stop")
+    @intent_handler(IntentBuilder("").require("Sonos").require("stop"))
     def handle_sonos_stop_intent(self, message):
         SC.pause(self.coordinator)
 
