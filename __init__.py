@@ -109,9 +109,9 @@ class SonosControl(MycroftSkill):
     def needSpeakers(self):
         self.speak_dialog("Need to find speakers")
         try:
-            coordinator = SC.rescan(self.ip_address)
+            coordinator = rescan(self.ip_address)
         except:
-            coorinator = SC.rescan(self.settings.get('coordinatr_ip'))
+            coorinator = rescan(self.settings.get('coordinatr_ip'))
 
 # Find the speakers return the controler
 def findspeakers():
