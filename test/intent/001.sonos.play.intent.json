@@ -1,0 +1,5 @@
+{
+"utterance": "sonos play",
+"intent_type": "sonosplayintent",
+"expected_response": "playing"
+}

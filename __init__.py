@@ -50,9 +50,9 @@ class SonosControl(MycroftSkill):
         self.settings['coordinator_ip']=self.ip_address
         LOG.debug('Coordinator IP is {}'.format(self.ip_address))
 
-    @intent_file_handler('control.sonos.intent')
-    def handle_control_sonos(self, message):
-        self.speak_dialog('control.sonos')
+    #@intent_file_handler('control.sonos.intent')
+    #def handle_control_sonos(self, message):
+    #    self.speak_dialog('control.sonos')
 
 
     # The "handle_xxxx_intent" function is triggered by Mycroft when the
@@ -68,7 +68,7 @@ class SonosControl(MycroftSkill):
     #   'Greetings planet earth'
 
     # Continue playing whatever was playing before play was pasued.
-    @intent_handler(IntentBuilder("").require("Sonos").require("Play"))
+    @intent_handler(IntentBuilder("sonosplayintent").require("sonos").require("play"))
     def handle_sonos_play_intent(self, message):
         if self.need_speakers:
             self.speak_dialog("No speakers found")
@@ -80,7 +80,7 @@ class SonosControl(MycroftSkill):
             needspeakers()
 
     # Pause whatever is playing.
-    @intent_handler(IntentBuilder("").require("Sonos").require("pause"))
+    @intent_handler(IntentBuilder("sonospauseintent").require("sonos").require("pause"))
     def handle_sonos_pause_intent(self, message):
         if self.need_speakers:
             self.speak_dialog("No speakers found") 
@@ -93,7 +93,7 @@ class SonosControl(MycroftSkill):
 
 
     # Handle this the same a a pause
-    @intent_handler(IntentBuilder("").require("Sonos").require("stop"))
+    @intent_handler(IntentBuilder("sonosstopintent").require("sonos").require("stop"))
     def handle_sonos_stop_intent(self, message):
         pause(self.coordinator)
 
