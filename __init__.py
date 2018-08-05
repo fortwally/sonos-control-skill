@@ -88,7 +88,7 @@ class SonosControl(MycroftSkill):
             return
         try:
             LOG.debug("In Pause Intent")
-            pause(self.coordinator)
+            self.coordinator.pause()
             self.speak_dialog("sonos.pause")
         except:
             needspeakers()
@@ -97,8 +97,17 @@ class SonosControl(MycroftSkill):
     # Handle this the same a a pause
     @intent_handler(IntentBuilder("sonosstopintent").require("sonos").require("stop"))
     def handle_sonos_stop_intent(self, message):
-        pause(self.coordinator)
+        self.coordinator.pause()
+        self.speak_dialog("sonos.pause")
 
+    # Skip to the next track
+    @intent_handler(IntentBuilder("sonosskipintent").require("sonos").require("skip"))
+    def handle_sonos_skip_intent(self, message):
+        try:
+            self.coordinator.pause()
+            self.speak_dialog("sonos.skip")
+        except:
+            self.speak("Can not skip what is playing")
 
     # The "stop" method defines what Mycroft does when told to stop during
     # the skill's execution. In this case, since the skill's functionality
@@ -135,9 +144,7 @@ def rescan(ip):
 def play(coordinator):
     coordinator.play()
 
-#Pause play
-def pause(coordinator):
-    coordinator.pause()
+
         
 
 def create_skill():
