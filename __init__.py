@@ -43,7 +43,7 @@ class SonosControl(MycroftSkill):
         # Initialize working variables used within the skill.
         self.count = 0
         work = findspeakers()
-        LOG.debug("Found Speakers {}".format(word[0]))
+        LOG.debug("Found Speakers {}".format(work[0]))
         self.need_speakers = work[0] # 1 no speakers
         self.coordinator = work[1] # the coordinator
         self.ip_address = self.coordinator.ip_address # python object
