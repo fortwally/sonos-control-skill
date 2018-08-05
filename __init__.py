@@ -106,7 +106,8 @@ class SonosControl(MycroftSkill):
         try:
             self.coordinator.next()
             self.speak_dialog("sonos.skip")
-        except:
+        except Exception as e:
+            LOG.debug(e.message)
             self.speak("Can not skip what is playing")
 
     # The "stop" method defines what Mycroft does when told to stop during
