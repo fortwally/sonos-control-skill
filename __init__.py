@@ -105,7 +105,7 @@ class SonosControl(MycroftSkill):
     # is extremely simple, there is no need to override it.  If you DO
     # need to implement stop, you should return True to indicate you handled
     # it.
-    def stop(self, message):
+    def stop(self):
         pass
 
     def needSpeakers(self):
