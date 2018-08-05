@@ -71,11 +71,12 @@ class SonosControl(MycroftSkill):
     @intent_handler(IntentBuilder("sonosplayintent").require("sonos").require("play"))
     def handle_sonos_play_intent(self, message):
         if self.need_speakers:
-            self.speak_dialog("No speakers found")
+            self.speak_dialog("sonos.nospeakers")
             return
         try:
             LOG.debug("In Play Intent")
             play(self.coordinator)
+            self.speak_dialog("sonos.play")
         except:
             needspeakers()
 
@@ -83,11 +84,12 @@ class SonosControl(MycroftSkill):
     @intent_handler(IntentBuilder("sonospauseintent").require("sonos").require("pause"))
     def handle_sonos_pause_intent(self, message):
         if self.need_speakers:
-            self.speak_dialog("No speakers found") 
+            self.speak_dialog("sonos.nospeakers") 
             return
         try:
             LOG.debug("In Pause Intent")
             pause(self.coordinator)
+            self.speak_dialog("sonos.pause")
         except:
             needspeakers()
 
@@ -107,7 +109,7 @@ class SonosControl(MycroftSkill):
         pass
 
     def needSpeakers(self):
-        self.speak_dialog("Need to find speakers")
+        self.speak_dialog("sonos.findspeakers")
         try:
             coordinator = rescan(self.ip_address)
         except:
