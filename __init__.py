@@ -104,7 +104,7 @@ class SonosControl(MycroftSkill):
     @intent_handler(IntentBuilder("sonosskipintent").require("sonos").require("skip"))
     def handle_sonos_skip_intent(self, message):
         try:
-            self.coordinator.pause()
+            self.coordinator.next()
             self.speak_dialog("sonos.skip")
         except:
             self.speak("Can not skip what is playing")
