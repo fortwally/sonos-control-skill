@@ -49,6 +49,7 @@ class SonosControl(MycroftSkill):
         self.ip_address = self.coordinator.ip_address # python object
         self.settings['coordinator_ip']=self.ip_address
         LOG.debug('Coordinator IP is {}'.format(self.ip_address))
+        self.volume = coorinator.volume
 
     #@intent_file_handler('control.sonos.intent')
     #def handle_control_sonos(self, message):
@@ -94,7 +95,7 @@ class SonosControl(MycroftSkill):
             needspeakers()
 
 
-    # Handle this the same a a pause
+    # Handle this the same as a pause
     @intent_handler(IntentBuilder("sonosstopintent").require("sonos").require("stop"))
     def handle_sonos_stop_intent(self, message):
         self.coordinator.pause()
@@ -109,6 +110,33 @@ class SonosControl(MycroftSkill):
         except Exception as e:
             LOG.debug(e.message)
             self.speak("Can not skip what is playing")
+
+
+    # Raise the volume of the speakers
+    @intent_handler(IntentBuilder("sonosvolumeupintent").require("sonos").require("volume").require("up"))
+    def handle_sonos_volume_up_intent(self, message):
+        v = self.volume + 10
+        if v => 99:
+            v = 99
+        try:
+            self.coordinator.volume() = v
+            self.speak_dialog("sonos.volume.up")
+        except Exception as e:
+            LOG.debug(e.message)
+            self.speak("Can not change volume")
+
+    # Lower the volume of the speakers
+    @intent_handler(IntentBuilder("sonosvolumedownintent").require("sonos").require("volume").require("down"))
+    def handle_sonos_volume_down_intent(self, message):
+        v = self.volume - 10
+        if v <= 10:
+            v = 10
+        try:
+            self.coordinator.volume() = v
+            self.speak_dialog("sonos.volume.down")
+        except Exception as e:
+            LOG.debug(e.message)
+            self.speak("Can not change volume")
 
     # The "stop" method defines what Mycroft does when told to stop during
     # the skill's execution. In this case, since the skill's functionality
@@ -141,7 +169,7 @@ def rescan(ip):
     coordinator = soco.SoCo(ip)
     return coordinator
 
-#Start continue playing whatever was playing
+# Continue playing whatever was playing
 def play(coordinator):
     coordinator.play()
 
