@@ -1,0 +1,5 @@
+{
+"utterance": "sonos volume up",
+"intent_type": "sonosvolumeupintent",
+"expected_dialog": "sonos.volume.up"
+}

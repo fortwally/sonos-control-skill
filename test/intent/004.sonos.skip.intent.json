@@ -1,0 +1,5 @@
+{
+"utterance": "sonos skip",
+"intent_type": "sonosskipintent",
+"expected_dialog": "sonos.skip"
+}

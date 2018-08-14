@@ -1,0 +1,5 @@
+{
+"utterance": "sonos stop",
+"intent_type": "sonosstopintent",
+"expected_dialog": "sonos.pause"
+}
