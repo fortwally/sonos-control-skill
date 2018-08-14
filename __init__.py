@@ -95,16 +95,11 @@ class SonosControl(MycroftSkill):
             needspeakers()
 
 
-    # Handle this the same as a pause
-    @intent_handler(IntentBuilder("sonosstopintent").require("sonos").require("stop"))
-    def handle_sonos_stop_intent(self, message):
-        self.coordinator.pause()
-        self.speak_dialog("sonos.pause")
-
     # Skip to the next track
     @intent_handler(IntentBuilder("sonosskipintent").require("sonos").require("skip"))
     def handle_sonos_skip_intent(self, message):
         try:
+            LOG.debug("In skip Intent")
             self.coordinator.next()
             self.speak_dialog("sonos.skip")
         except Exception as e:
@@ -119,6 +114,7 @@ class SonosControl(MycroftSkill):
         if v >= 99:
             v = 99
         try:
+            LOG.debug("In Volume up Intent")
             self.coordinator.volume = v
             self.speak_dialog("sonos.volume.up")
         except Exception as e:
@@ -132,6 +128,7 @@ class SonosControl(MycroftSkill):
         if v <= 10:
             v = 10
         try:
+            LOG.debug("In Volume down Intent")
             self.coordinator.volume = v
             self.speak_dialog("sonos.volume.down")
         except Exception as e:
