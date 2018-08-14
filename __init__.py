@@ -49,7 +49,7 @@ class SonosControl(MycroftSkill):
         self.ip_address = self.coordinator.ip_address # python object
         self.settings['coordinator_ip']=self.ip_address
         LOG.debug('Coordinator IP is {}'.format(self.ip_address))
-        self.volume = coorinator.volume
+        self.volume = self.coordinator.volume
 
     #@intent_file_handler('control.sonos.intent')
     #def handle_control_sonos(self, message):
@@ -116,10 +116,10 @@ class SonosControl(MycroftSkill):
     @intent_handler(IntentBuilder("sonosvolumeupintent").require("sonos").require("volume").require("up"))
     def handle_sonos_volume_up_intent(self, message):
         v = self.volume + 10
-        if v => 99:
+        if v >= 99:
             v = 99
         try:
-            self.coordinator.volume() = v
+            self.coordinator.volume = v
             self.speak_dialog("sonos.volume.up")
         except Exception as e:
             LOG.debug(e.message)
@@ -132,7 +132,7 @@ class SonosControl(MycroftSkill):
         if v <= 10:
             v = 10
         try:
-            self.coordinator.volume() = v
+            self.coordinator.volume = v
             self.speak_dialog("sonos.volume.down")
         except Exception as e:
             LOG.debug(e.message)
