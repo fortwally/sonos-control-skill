@@ -108,7 +108,7 @@ class SonosControl(MycroftSkill):
 
 
     # Raise the volume of the speakers
-    @intent_handler(IntentBuilder("sonosvolumeupintent").require("sonos").require("volume").require("up"))
+    @intent_handler(IntentBuilder("sonosvolumeupintent").require("sonos").require("Volume").require("Increase"))
     def handle_sonos_volume_up_intent(self, message):
         v = self.volume + 10
         if v >= 99:
@@ -122,7 +122,7 @@ class SonosControl(MycroftSkill):
             self.speak("Can not change volume")
 
     # Lower the volume of the speakers
-    @intent_handler(IntentBuilder("sonosvolumedownintent").require("sonos").require("volume").require("down"))
+    @intent_handler(IntentBuilder("sonosvolumedownintent").require("sonos").require("Volume").require("Decrease"))
     def handle_sonos_volume_down_intent(self, message):
         v = self.volume - 10
         if v <= 10:
