@@ -113,6 +113,8 @@ class SonosControl(MycroftSkill):
         v = self.volume + 10
         if v >= 99:
             v = 99
+
+        self.volume = v
         try:
             LOG.debug("In Volume up Intent")
             self.coordinator.volume = v
@@ -127,6 +129,8 @@ class SonosControl(MycroftSkill):
         v = self.volume - 10
         if v <= 10:
             v = 10
+
+        self.volume = v
         try:
             LOG.debug("In Volume down Intent")
             self.coordinator.volume = v
