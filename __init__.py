@@ -69,7 +69,7 @@ class SonosControl(MycroftSkill):
     #   'Greetings planet earth'
 
     # Continue playing whatever was playing before play was pasued.
-    @intent_handler(IntentBuilder("sonosplayintent").require("sonos").require("play"))
+    @intent_handler(IntentBuilder("sonosplayintent").require("Sonos").require("play"))
     def handle_sonos_play_intent(self, message):
         if self.need_speakers:
             self.speak_dialog("sonos.nospeakers")
@@ -82,7 +82,7 @@ class SonosControl(MycroftSkill):
             needspeakers()
 
     # Pause whatever is playing.
-    @intent_handler(IntentBuilder("sonospauseintent").require("sonos").require("pause"))
+    @intent_handler(IntentBuilder("sonospauseintent").require("Sonos").require("pause"))
     def handle_sonos_pause_intent(self, message):
         if self.need_speakers:
             self.speak_dialog("sonos.nospeakers") 
@@ -96,7 +96,7 @@ class SonosControl(MycroftSkill):
 
 
     # Skip to the next track
-    @intent_handler(IntentBuilder("sonosskipintent").require("sonos").require("skip"))
+    @intent_handler(IntentBuilder("sonosskipintent").require("Sonos").require("skip"))
     def handle_sonos_skip_intent(self, message):
         try:
             LOG.debug("In skip Intent")
@@ -108,7 +108,7 @@ class SonosControl(MycroftSkill):
 
 
     # Raise the volume of the speakers
-    @intent_handler(IntentBuilder("sonosvolumeupintent").require("sonos").require("Volume").require("Increase"))
+    @intent_handler(IntentBuilder("sonosvolumeupintent").require("Sonos").require("Volume").require("Increase"))
     def handle_sonos_volume_up_intent(self, message):
         v = self.volume + 10
         if v >= 99:
@@ -124,7 +124,7 @@ class SonosControl(MycroftSkill):
             self.speak("Can not change volume")
 
     # Lower the volume of the speakers
-    @intent_handler(IntentBuilder("sonosvolumedownintent").require("sonos").require("Volume").require("Decrease"))
+    @intent_handler(IntentBuilder("sonosvolumedownintent").require("Sonos").require("Volume").require("Decrease"))
     def handle_sonos_volume_down_intent(self, message):
         v = self.volume - 10
         if v <= 10:
