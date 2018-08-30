@@ -28,7 +28,7 @@ SOFTWARE.
 # Added soco to requirments.txt
 from adapt.intent import IntentBuilder
 from mycroft import MycroftSkill, intent_file_handler, intent_handler
-from mycroft.util.log import getLogger, LOG
+from mycroft.util.log import getLogger
 import soco
 
 __author__ = 'fortwally'
@@ -41,14 +41,14 @@ class SonosControl(MycroftSkill):
         super(SonosControl, self).__init__(name="SonosControl")
 
         # Initialize working variables used within the skill.
-        self.count = 0
+        self.need_speakers = 0
         work = findspeakers()
-        LOG.debug("Found Speakers {}".format(work[0]))
-        self.need_speakers = work[0] # 1 no speakers
-        self.coordinator = work[1] # the coordinator
+        LOGGER.debug("Found Speakers {}".format(work[0]))
+        self.need_speakers = work[0] # 1 = no speakers
+        self.coordinator = work[1] # the coordinator obj
         self.ip_address = self.coordinator.ip_address # python object
         self.settings['coordinator_ip']=self.ip_address
-        LOG.debug('Coordinator IP is {}'.format(self.ip_address))
+        LOGGER.debug('Coordinator IP is {}'.format(self.ip_address))
         self.volume = self.coordinator.volume
 
     #@intent_file_handler('control.sonos.intent')
@@ -75,8 +75,8 @@ class SonosControl(MycroftSkill):
             self.speak_dialog("sonos.nospeakers")
             return
         try:
-            LOG.debug("In Play Intent")
-            play(self.coordinator)
+            LOGGER.debug("In Play Intent")
+            self.coordinator.play()
             self.speak_dialog("sonos.play")
         except:
             needspeakers()
@@ -88,7 +88,7 @@ class SonosControl(MycroftSkill):
             self.speak_dialog("sonos.nospeakers") 
             return
         try:
-            LOG.debug("In Pause Intent")
+            LOGGER.debug("In Pause Intent")
             self.coordinator.pause()
             self.speak_dialog("sonos.pause")
         except:
@@ -99,11 +99,11 @@ class SonosControl(MycroftSkill):
     @intent_handler(IntentBuilder("sonosskipintent").require("Sonos").require("skip"))
     def handle_sonos_skip_intent(self, message):
         try:
-            LOG.debug("In skip Intent")
+            LOGGER.debug("In skip Intent")
             self.coordinator.next()
             self.speak_dialog("sonos.skip")
         except Exception as e:
-            LOG.debug(e.message)
+            LOGGER.debug(e.message)
             self.speak("Can not skip what is playing")
 
 
@@ -116,11 +116,11 @@ class SonosControl(MycroftSkill):
 
         self.volume = v
         try:
-            LOG.debug("In Volume up Intent")
+            LOGGER.debug("In Volume up Intent")
             self.coordinator.volume = v
             self.speak_dialog("sonos.volume.up")
         except Exception as e:
-            LOG.debug(e.message)
+            LOGGER.debug(e.message)
             self.speak("Can not change volume")
 
     # Lower the volume of the speakers
@@ -132,12 +132,21 @@ class SonosControl(MycroftSkill):
 
         self.volume = v
         try:
-            LOG.debug("In Volume down Intent")
+            LOGGER.debug("In Volume down Intent")
             self.coordinator.volume = v
             self.speak_dialog("sonos.volume.down")
         except Exception as e:
-            LOG.debug(e.message)
+            LOGGER.debug(e.message)
             self.speak("Can not change volume")
+
+    # Get the title and artist and say to user
+    @intent_handler(IntentBuilder("songnameintent").require("Sonos").require("query").require("song"))
+    def handle_song_name_intent(self, message):
+        track = self.coordinator.get_current_track_info()
+        title = track['title']
+        artist = track['artist']
+        self.speak_dialog('song_name', {'title': title, 'artist': artist})
+
 
     # The "stop" method defines what Mycroft does when told to stop during
     # the skill's execution. In this case, since the skill's functionality
@@ -169,10 +178,6 @@ def findspeakers():
 def rescan(ip):
     coordinator = soco.SoCo(ip)
     return coordinator
-
-# Continue playing whatever was playing
-def play(coordinator):
-    coordinator.play()
 
 
         

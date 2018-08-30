@@ -11,6 +11,7 @@ Assumes all speakers are in one group.
  - "Sonos skip"
  - "Sonos volume up"
  - "Sonos volume down"
+ - "Sonos what song is playing"
 
 
 ## Credits
