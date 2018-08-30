@@ -145,7 +145,8 @@ class SonosControl(MycroftSkill):
         track = self.coordinator.get_current_track_info()
         title = track['title']
         artist = track['artist']
-        self.speak_dialog('song_name', {'title': title, 'artist': artist})
+        album = track['album']
+        self.speak_dialog('song_name', {'title': title, 'album': album, 'artist': artist})
 
 
     # The "stop" method defines what Mycroft does when told to stop during
