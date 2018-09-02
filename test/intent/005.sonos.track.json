@@ -1,5 +1,5 @@
 {
 "utterance": "sonos what song",
-"intent_type": "sonosnameintent",
+"intent_type": "songnameintent",
 "expected_dialog": "song_name"
 }
