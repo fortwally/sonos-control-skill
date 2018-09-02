@@ -43,7 +43,7 @@ class SonosControl(MycroftSkill):
         # Initialize working variables used within the skill.
         self.need_speakers = 1 # 1 = no speakers
         spk = findspeakers()
-        if len(spk) == 0:
+        if spk == "":
             LOGGER.debug("Did not find any Sonos speakers")
             return
         LOGGER.debug("Found Speakers")
