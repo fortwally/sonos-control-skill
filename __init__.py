@@ -49,8 +49,9 @@ class SonosControl(MycroftSkill):
         LOGGER.debug("Found Speakers")
         self.need_speakers = 0
         self.coordinator = spk # the coordinator obj
-        self.settings['coordinator_ip']=self.coordinator.ip_address
-        LOGGER.debug('Coordinator IP is {}'.format(self.ip_address))
+        ip = self.coordinator.ip_address
+        self.settings['coordinator_ip']= ip
+        LOGGER.debug('Coordinator IP is {}'.format(ip))
         self.volume = self.coordinator.volume
 
 
