@@ -1,2 +1,4 @@
-The current song is {{title}} on {{album}} by {{artist}}
-It is {{title}} on {{album}} by {{artist}}
+The current song is {{title}} on album {{album}} by {{artist}}
+It is {{title}} on album {{album}} by {{artist}}
+The current song is {{title}} by {{artist}} on album {{album}}
+That would be {{title}} by {{artist}} on album {{album}}

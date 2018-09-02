@@ -41,19 +41,9 @@ class SonosControl(MycroftSkill):
         super(SonosControl, self).__init__(name="SonosControl")
 
         # Initialize working variables used within the skill.
-        self.need_speakers = 0
-        work = findspeakers()
-        LOGGER.debug("Found Speakers {}".format(work[0]))
-        self.need_speakers = work[0] # 1 = no speakers
-        self.coordinator = work[1] # the coordinator obj
-        self.ip_address = self.coordinator.ip_address # python object
-        self.settings['coordinator_ip']=self.ip_address
-        LOGGER.debug('Coordinator IP is {}'.format(self.ip_address))
-        self.volume = self.coordinator.volume
+        self.need_speakers = 1
+        buildspeakers()
 
-    #@intent_file_handler('control.sonos.intent')
-    #def handle_control_sonos(self, message):
-    #    self.speak_dialog('control.sonos')
 
 
     # The "handle_xxxx_intent" function is triggered by Mycroft when the
@@ -79,7 +69,7 @@ class SonosControl(MycroftSkill):
             self.coordinator.play()
             self.speak_dialog("sonos.play")
         except:
-            needspeakers()
+            buildspeakers()
 
     # Pause whatever is playing.
     @intent_handler(IntentBuilder("sonospauseintent").require("Sonos").require("pause"))
@@ -92,7 +82,7 @@ class SonosControl(MycroftSkill):
             self.coordinator.pause()
             self.speak_dialog("sonos.pause")
         except:
-            needspeakers()
+            buildspeakers()
 
 
     # Skip to the next track
@@ -157,28 +147,28 @@ class SonosControl(MycroftSkill):
     def stop(self):
         pass
 
-    def needSpeakers(self):
-        self.speak_dialog("sonos.findspeakers")
-        try:
-            coordinator = rescan(self.ip_address)
-        except:
-            coorinator = rescan(self.settings.get('coordinatr_ip'))
+    def buildspeakers(self):
+        spk = findspeakers()
+        if len(spk) == 0:
+            LOGGER.debug("Did not find any Sonos speakers")
+            return
+        LOGGER.debug("Found Speakers")
+        self.need_speakers = 0 # 1 = no speakers
+        self.coordinator = spk # the coordinator obj
+        self.settings['coordinator_ip']=self.coordinator.ip_address
+        LOGGER.debug('Coordinator IP is {}'.format(self.ip_address))
+        self.volume = self.coordinator.volume
 
 # Find the speakers return the controler
 def findspeakers():
     speakers = soco.discover()
     if len(speakers) == 0 :
-        return [1, "no.sonos.speakers"]
+        return ""
     spk = speakers.pop()
     group = spk.group
     coordinator = group.coordinator
-    return [0, coordinator]
-
-# Called if coordinator object is not valid
-# try using old IP address
-def rescan(ip):
-    coordinator = soco.SoCo(ip)
     return coordinator
+
 
 
         
