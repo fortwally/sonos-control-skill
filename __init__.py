@@ -42,7 +42,7 @@ class SonosControl(MycroftSkill):
 
         # Initialize working variables used within the skill.
         self.need_speakers = 1
-        buildspeakers()
+        self.buildspeakers()
 
 
 
@@ -69,7 +69,7 @@ class SonosControl(MycroftSkill):
             self.coordinator.play()
             self.speak_dialog("sonos.play")
         except:
-            buildspeakers()
+            self.buildspeakers()
 
     # Pause whatever is playing.
     @intent_handler(IntentBuilder("sonospauseintent").require("Sonos").require("pause"))
@@ -82,7 +82,7 @@ class SonosControl(MycroftSkill):
             self.coordinator.pause()
             self.speak_dialog("sonos.pause")
         except:
-            buildspeakers()
+            self.buildspeakers()
 
 
     # Skip to the next track
