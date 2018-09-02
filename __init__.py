@@ -41,8 +41,17 @@ class SonosControl(MycroftSkill):
         super(SonosControl, self).__init__(name="SonosControl")
 
         # Initialize working variables used within the skill.
-        self.need_speakers = 1
-        self.buildspeakers()
+        self.need_speakers = 1 # 1 = no speakers
+        spk = findspeakers()
+        if len(spk) == 0:
+            LOGGER.debug("Did not find any Sonos speakers")
+            return
+        LOGGER.debug("Found Speakers")
+        self.need_speakers = 0
+        self.coordinator = spk # the coordinator obj
+        self.settings['coordinator_ip']=self.coordinator.ip_address
+        LOGGER.debug('Coordinator IP is {}'.format(self.ip_address))
+        self.volume = self.coordinator.volume
 
 
 
@@ -69,7 +78,8 @@ class SonosControl(MycroftSkill):
             self.coordinator.play()
             self.speak_dialog("sonos.play")
         except:
-            self.buildspeakers()
+            #self.buildspeakers()
+            pass
 
     # Pause whatever is playing.
     @intent_handler(IntentBuilder("sonospauseintent").require("Sonos").require("pause"))
@@ -82,7 +92,8 @@ class SonosControl(MycroftSkill):
             self.coordinator.pause()
             self.speak_dialog("sonos.pause")
         except:
-            self.buildspeakers()
+            #self.buildspeakers()
+            pass
 
 
     # Skip to the next track
@@ -111,7 +122,7 @@ class SonosControl(MycroftSkill):
             self.speak_dialog("sonos.volume.up")
         except Exception as e:
             LOGGER.debug(e.message)
-            self.speak("Can not change volume")
+            self.speak_dialog("no_volume_change")
 
     # Lower the volume of the speakers
     @intent_handler(IntentBuilder("sonosvolumedownintent").require("Sonos").require("Volume").require("Decrease"))
@@ -127,7 +138,7 @@ class SonosControl(MycroftSkill):
             self.speak_dialog("sonos.volume.down")
         except Exception as e:
             LOGGER.debug(e.message)
-            self.speak("Can not change volume")
+            self.speak_dialog("no_volume_change")
 
     # Get the title and artist and say to user
     @intent_handler(IntentBuilder("songnameintent").require("Sonos").require("query").require("song"))
@@ -147,17 +158,17 @@ class SonosControl(MycroftSkill):
     def stop(self):
         pass
 
-    def buildspeakers(self):
-        spk = findspeakers()
-        if len(spk) == 0:
-            LOGGER.debug("Did not find any Sonos speakers")
-            return
-        LOGGER.debug("Found Speakers")
-        self.need_speakers = 0 # 1 = no speakers
-        self.coordinator = spk # the coordinator obj
-        self.settings['coordinator_ip']=self.coordinator.ip_address
-        LOGGER.debug('Coordinator IP is {}'.format(self.ip_address))
-        self.volume = self.coordinator.volume
+##    def buildspeakers(self):
+##        spk = findspeakers()
+##        if len(spk) == 0:
+##            LOGGER.debug("Did not find any Sonos speakers")
+##            return
+##        LOGGER.debug("Found Speakers")
+##        self.need_speakers = 0 # 1 = no speakers
+##        self.coordinator = spk # the coordinator obj
+##        self.settings['coordinator_ip']=self.coordinator.ip_address
+##        LOGGER.debug('Coordinator IP is {}'.format(self.ip_address))
+##        self.volume = self.coordinator.volume
 
 # Find the speakers return the controler
 def findspeakers():
