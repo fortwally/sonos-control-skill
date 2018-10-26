@@ -1,5 +1,5 @@
 """
-The MIT License (MIT)   
+The MIT License (MIT)
 
 Copyright (c) 2018 Wally Fort
 
@@ -35,26 +35,25 @@ __author__ = 'fortwally'
 
 LOGGER = getLogger(__name__)
 
+
 class SonosControl(MycroftSkill):
     # The constructor of the skill, which calls MycroftSkill's constructor
     def __init__(self):
         super(SonosControl, self).__init__(name="SonosControl")
 
         # Initialize working variables used within the skill.
-        self.need_speakers = 1 # 1 = no speakers
-        spk = findspeakers()
-        if spk == "":
+        self.need_speakers = 1  # 1 = no speakers
+        speaker = findspeakers()
+        if speaker == "":
             LOGGER.debug("Did not find any Sonos speakers")
             return
         LOGGER.debug("Found Speakers")
         self.need_speakers = 0
-        self.coordinator = spk # the coordinator obj
+        self.coordinator = speaker  # the coordinator obj
         ip = self.coordinator.ip_address
-        self.settings['coordinator_ip']= ip
+        self.settings['coordinator_ip'] = ip
         LOGGER.debug('Coordinator IP is {}'.format(ip))
         self.volume = self.coordinator.volume
-
-
 
     # The "handle_xxxx_intent" function is triggered by Mycroft when the
     # skill's intent is matched.  The intent is defined by the IntentBuilder()
@@ -78,24 +77,24 @@ class SonosControl(MycroftSkill):
             LOGGER.debug("In Play Intent")
             self.coordinator.play()
             self.speak_dialog("sonos.play")
-        except:
-            #self.buildspeakers()
+        except Exception as e:
+            LOGGER.debug(e.message)
             pass
 
     # Pause whatever is playing.
     @intent_handler(IntentBuilder("sonospauseintent").require("Sonos").require("pause"))
     def handle_sonos_pause_intent(self, message):
         if self.need_speakers:
-            self.speak_dialog("sonos.nospeakers") 
+            self.speak_dialog("sonos.nospeakers")
             return
         try:
             LOGGER.debug("In Pause Intent")
             self.coordinator.pause()
             self.speak_dialog("sonos.pause")
-        except:
-            #self.buildspeakers()
+        except Exception as e:
+            LOGGER.debug(e.message)
+            # self.buildspeakers()
             pass
-
 
     # Skip to the next track
     @intent_handler(IntentBuilder("sonosskipintent").require("Sonos").require("skip"))
@@ -108,14 +107,12 @@ class SonosControl(MycroftSkill):
             LOGGER.debug(e.message)
             self.speak("Can not skip what is playing")
 
-
     # Raise the volume of the speakers
     @intent_handler(IntentBuilder("sonosvolumeupintent").require("Sonos").require("Volume").require("Increase"))
     def handle_sonos_volume_up_intent(self, message):
         v = self.volume + 10
         if v >= 99:
             v = 99
-
         self.volume = v
         try:
             LOGGER.debug("In Volume up Intent")
@@ -131,7 +128,6 @@ class SonosControl(MycroftSkill):
         v = self.volume - 10
         if v <= 10:
             v = 10
-
         self.volume = v
         try:
             LOGGER.debug("In Volume down Intent")
@@ -150,7 +146,6 @@ class SonosControl(MycroftSkill):
         album = track['album']
         self.speak_dialog('song_name', {'title': title, 'album': album, 'artist': artist})
 
-
     # The "stop" method defines what Mycroft does when told to stop during
     # the skill's execution. In this case, since the skill's functionality
     # is extremely simple, there is no need to override it.  If you DO
@@ -159,31 +154,29 @@ class SonosControl(MycroftSkill):
     def stop(self):
         pass
 
-##    def buildspeakers(self):
-##        spk = findspeakers()
-##        if len(spk) == 0:
-##            LOGGER.debug("Did not find any Sonos speakers")
-##            return
-##        LOGGER.debug("Found Speakers")
-##        self.need_speakers = 0 # 1 = no speakers
-##        self.coordinator = spk # the coordinator obj
-##        self.settings['coordinator_ip']=self.coordinator.ip_address
-##        LOGGER.debug('Coordinator IP is {}'.format(self.ip_address))
-##        self.volume = self.coordinator.volume
+#    def buildspeakers(self):
+#        spk = findspeakers()
+#        if len(spk) == 0:
+#            LOGGER.debug("Did not find any Sonos speakers")
+#            return
+#        LOGGER.debug("Found Speakers")
+#        self.need_speakers = 0 # 1 = no speakers
+#        self.coordinator = spk # the coordinator obj
+#        self.settings['coordinator_ip']=self.coordinator.ip_address
+#        LOGGER.debug('Coordinator IP is {}'.format(self.ip_address))
+#        self.volume = self.coordinator.volume
+
 
 # Find the speakers return the controler
 def findspeakers():
     speakers = soco.discover()
-    if len(speakers) == 0 :
+    if len(speakers) == 0:
         return ""
     spk = speakers.pop()
     group = spk.group
     coordinator = group.coordinator
     return coordinator
 
-
-
-        
 
 def create_skill():
     return SonosControl()
