@@ -42,18 +42,21 @@ class SonosControl(MycroftSkill):
         super(SonosControl, self).__init__(name="SonosControl")
 
         # Initialize working variables used within the skill.
-        self.need_speakers = 1  # 1 = no speakers
+        self.need_speakers = True  # 1 = no speakers
+
+    def initialize(self):
         speaker = findspeakers()
         if speaker == "":
             LOGGER.debug("Did not find any Sonos speakers")
             return
         LOGGER.debug("Found Speakers")
-        self.need_speakers = 0
+        self.need_speakers = False
         self.coordinator = speaker  # the coordinator obj
         ip = self.coordinator.ip_address
         self.settings['coordinator_ip'] = ip
         LOGGER.debug('Coordinator IP is {}'.format(ip))
         self.volume = self.coordinator.volume
+        
 
     # The "handle_xxxx_intent" function is triggered by Mycroft when the
     # skill's intent is matched.  The intent is defined by the IntentBuilder()
