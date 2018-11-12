@@ -40,18 +40,18 @@ class SonosControl(MycroftSkill):
     # The constructor of the skill, which calls MycroftSkill's constructor
     def __init__(self):
         super(SonosControl, self).__init__(name="SonosControl")
-
         # Initialize working variables used within the skill.
-        self.need_speakers = True  # 1 = no speakers
+        self.need_speakers = True
 
+    # Now get the sonos info.
     def initialize(self):
-        speaker = findspeakers()
-        if speaker == "":
+        coord = findspeakers()
+        if coord == "":
             LOGGER.debug("Did not find any Sonos speakers")
             return
         LOGGER.debug("Found Speakers")
         self.need_speakers = False
-        self.coordinator = speaker  # the coordinator obj
+        self.coordinator = coord  # the coordinator obj
         ip = self.coordinator.ip_address
         self.settings['coordinator_ip'] = ip
         LOGGER.debug('Coordinator IP is {}'.format(ip))
@@ -61,14 +61,7 @@ class SonosControl(MycroftSkill):
     # The "handle_xxxx_intent" function is triggered by Mycroft when the
     # skill's intent is matched.  The intent is defined by the IntentBuilder()
     # pieces, and is triggered when the user's utterance matches the pattern
-    # defined by the keywords.  In this case, the match occurs when one word
-    # is found from each of the files:
-    #    vocab/en-us/Hello.voc
-    #    vocab/en-us/World.voc
-    # In this example that means it would match on utterances like:
-    #   'Hello world'
-    #   'Howdy you great big world'
-    #   'Greetings planet earth'
+    # defined by the keywords.
 
     # Continue playing whatever was playing before play was pasued.
     @intent_handler(IntentBuilder("sonosplayintent").require("Sonos").require("play"))
@@ -113,6 +106,7 @@ class SonosControl(MycroftSkill):
     # Raise the volume of the speakers
     @intent_handler(IntentBuilder("sonosvolumeupintent").require("Sonos").require("Volume").require("Increase"))
     def handle_sonos_volume_up_intent(self, message):
+        LOGGER.debug("Msg: " + message)
         v = self.volume + 10
         if v >= 99:
             v = 99
