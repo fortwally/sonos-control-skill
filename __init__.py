@@ -106,7 +106,7 @@ class SonosControl(MycroftSkill):
     # Raise the volume of the speakers
     @intent_handler(IntentBuilder("sonosvolumeupintent").require("Sonos").require("Volume").require("Increase"))
     def handle_sonos_volume_up_intent(self, message):
-        utt = message.data.get['utterance','']
+        utt = message.data.get('utterance','')
         LOGGER.debug("utterance is: {}".format(utt))
         if 'loud' in utt.split():
             v = 75
@@ -123,7 +123,7 @@ class SonosControl(MycroftSkill):
     # Lower the volume of the speakers
     @intent_handler(IntentBuilder("sonosvolumedownintent").require("Sonos").require("Volume").require("Decrease"))
     def handle_sonos_volume_down_intent(self, message):
-        utt = message.data.get['utterance','']
+        utt = message.data.get('utterance','')
         LOGGER.debug("utterance is: {}".format(utt))
         if 'soft' in utt.split():
             v = 25
