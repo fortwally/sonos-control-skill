@@ -106,11 +106,11 @@ class SonosControl(MycroftSkill):
     # Raise the volume of the speakers
     @intent_handler(IntentBuilder("sonosvolumeupintent").require("Sonos").require("Volume").require("Increase"))
     def handle_sonos_volume_up_intent(self, message):
-        for key in message.data.keys():
-            LOGGER.debug("Msg keys: {} is {}".format(key, message.data[key]))
-        v = self.volume + 10
-        if v >= 99:
-            v = 99
+        utt = message.data.get['utterance','']
+        LOGGER.debug("utterance is: {}".format(utt))
+        if 'loud' in utt.split():
+            v = 75
+        v = vol_check(self.volume + 10)
         self.volume = v
         try:
             LOGGER.debug("In Volume up Intent")
@@ -123,9 +123,11 @@ class SonosControl(MycroftSkill):
     # Lower the volume of the speakers
     @intent_handler(IntentBuilder("sonosvolumedownintent").require("Sonos").require("Volume").require("Decrease"))
     def handle_sonos_volume_down_intent(self, message):
-        v = self.volume - 10
-        if v <= 10:
-            v = 10
+        utt = message.data.get['utterance','']
+        LOGGER.debug("utterance is: {}".format(utt))
+        if 'soft' in utt.split():
+            v = 25
+        v = vol_check(self.volume - 10)
         self.volume = v
         try:
             LOGGER.debug("In Volume down Intent")
@@ -139,9 +141,9 @@ class SonosControl(MycroftSkill):
     @intent_handler(IntentBuilder("songnameintent").require("Sonos").require("query").require("song"))
     def handle_song_name_intent(self, message):
         track = self.coordinator.get_current_track_info()
-        title = track['title']
-        artist = track['artist']
-        album = track['album']
+        title = track.get('title')
+        artist = track.get('artist')
+        album = track.get('album')
         self.speak_dialog('song_name', {'title': title, 'album': album, 'artist': artist})
 
     # The "stop" method defines what Mycroft does when told to stop during
@@ -164,6 +166,13 @@ class SonosControl(MycroftSkill):
 #        LOGGER.debug('Coordinator IP is {}'.format(self.ip_address))
 #        self.volume = self.coordinator.volume
 
+# Check that the volume value is in range
+def vol_check(v):
+    if v <= 10:
+        v = 10
+    if v >= 99:
+        v=99
+    return v
 
 # Find the speakers return the controler
 def findspeakers():
