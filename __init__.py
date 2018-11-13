@@ -106,7 +106,8 @@ class SonosControl(MycroftSkill):
     # Raise the volume of the speakers
     @intent_handler(IntentBuilder("sonosvolumeupintent").require("Sonos").require("Volume").require("Increase"))
     def handle_sonos_volume_up_intent(self, message):
-        LOGGER.debug("Msg: " + message)
+        for key in message.data.keys():
+            LOGGER.debug("Msg keys: {} is {}".format(key, message.data[key]))
         v = self.volume + 10
         if v >= 99:
             v = 99
