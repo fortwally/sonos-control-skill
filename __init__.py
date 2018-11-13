@@ -108,9 +108,9 @@ class SonosControl(MycroftSkill):
     def handle_sonos_volume_up_intent(self, message):
         utt = message.data.get('utterance','')
         LOGGER.debug("utterance is: {}".format(utt))
+        v = vol_check(self.volume + 10)
         if 'loud' in utt.split():
             v = 75
-        v = vol_check(self.volume + 10)
         self.volume = v
         try:
             LOGGER.debug("In Volume up Intent")
@@ -125,9 +125,9 @@ class SonosControl(MycroftSkill):
     def handle_sonos_volume_down_intent(self, message):
         utt = message.data.get('utterance','')
         LOGGER.debug("utterance is: {}".format(utt))
+        v = vol_check(self.volume - 10)
         if 'soft' in utt.split():
             v = 25
-        v = vol_check(self.volume - 10)
         self.volume = v
         try:
             LOGGER.debug("In Volume down Intent")
