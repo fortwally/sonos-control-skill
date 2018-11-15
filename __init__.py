@@ -106,11 +106,11 @@ class SonosControl(MycroftSkill):
         utt = message.data.get('utterance', '')
         LOGGER.debug("utterance is: {}".format(utt))
         if 'loud' in utt.split():
-            s = volume(75, 0, True)
+            s = self.set_vol(75, 0, True)
         elif 'middle' in utt.split():
-            s = volume(50, 0, True)
+            s = self.set_vol(50, 0, True)
         else:
-            s = volume(10, 0, False)
+            s = self.set_vol(10, 0, False)
         if s:
             self.speak_dialog("sonos.volume.up")
         else:
@@ -122,9 +122,9 @@ class SonosControl(MycroftSkill):
         utt = message.data.get('utterance', '')
         LOGGER.debug("utterance is: {}".format(utt))
         if 'soft' in utt.split():
-            s = volume(25, 0, True)
+            s = self.set_vol(25, 0, True)
         else:
-            s = volume(0, 10, False)
+            s = self.set_vol(0, 10, False)
         if s:
             self.speak_dialog("sonos.volume.down")
         else:
@@ -157,7 +157,7 @@ class SonosControl(MycroftSkill):
         coordinator = group.coordinator
         return coordinator
 
-    def volume(self, up=0, down=0, fixed=False):
+    def set_vol(self, up=0, down=0, fixed=False):
         vol = self.volume
         status = True
         for sp in self.members:
