@@ -52,8 +52,8 @@ class SonosControl(MycroftSkill):
         LOGGER.debug("Found Speakers")
         self.need_speakers = False
         self.coordinator = coord  # the coordinator obj
-        LOGGER.debug('Coordinator IP is {}'.format(ip))
-        self.volume = self.coordinator.volume
+        #LOGGER.debug('Coordinator IP is {}'.format(ip))
+        #self.volume = self.coordinator.volume
 
     # The "handle_xxxx_intent" function is triggered by Mycroft when the
     # skill's intent is matched.  The intent is defined by the IntentBuilder()
