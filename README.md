@@ -10,7 +10,10 @@ Assumes all speakers are in one group.
  - "Sonos pause"
  - "Sonos skip"
  - "Sonos volume up"
+ - "Sonos volume loud"
+ - "Sonos volume middle"
  - "Sonos volume down"
+ - "Sonos volume soft"
  - "Sonos what song is playing"
 
 
