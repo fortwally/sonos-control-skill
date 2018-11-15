@@ -32,6 +32,9 @@ from mycroft.util.log import getLogger
 import soco
 
 __author__ = 'fortwally'
+VOL_LOUD = 75
+VOL_MID = 50
+VOL_SOFT = 25
 
 LOGGER = getLogger(__name__)
 
@@ -44,6 +47,8 @@ class SonosControl(MycroftSkill):
         self.need_speakers = True
 
     # Now get the sonos info.
+    # self.members all the speakers that we need to talk to
+    # self.volume the current volume of each speaker
     def initialize(self):
         coord = self.findspeakers()
         if coord == "":
@@ -52,8 +57,6 @@ class SonosControl(MycroftSkill):
         LOGGER.debug("Found Speakers")
         self.need_speakers = False
         self.coordinator = coord  # the coordinator obj
-        #LOGGER.debug('Coordinator IP is {}'.format(ip))
-        #self.volume = self.coordinator.volume
 
     # The "handle_xxxx_intent" function is triggered by Mycroft when the
     # skill's intent is matched.  The intent is defined by the IntentBuilder()
@@ -106,9 +109,9 @@ class SonosControl(MycroftSkill):
         utt = message.data.get('utterance', '')
         LOGGER.debug("utterance is: {}".format(utt))
         if 'loud' in utt.split():
-            s = self.set_vol(75, 0, True)
+            s = self.set_vol(VOL_LOUD, 0, True)
         elif 'middle' in utt.split():
-            s = self.set_vol(50, 0, True)
+            s = self.set_vol(VOL_MID, 0, True)
         else:
             s = self.set_vol(10, 0, False)
         if s:
@@ -122,7 +125,7 @@ class SonosControl(MycroftSkill):
         utt = message.data.get('utterance', '')
         LOGGER.debug("utterance is: {}".format(utt))
         if 'soft' in utt.split():
-            s = self.set_vol(25, 0, True)
+            s = self.set_vol(VOL_SOFT, 0, True)
         else:
             s = self.set_vol(0, 10, False)
         if s:
