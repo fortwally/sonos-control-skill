@@ -45,7 +45,7 @@ class SonosControl(MycroftSkill):
 
     # Now get the sonos info.
     def initialize(self):
-        coord = findspeakers()
+        coord = self.findspeakers()
         if coord == "":
             LOGGER.debug("Did not find any Sonos speakers")
             return
