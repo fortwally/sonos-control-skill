@@ -18,7 +18,7 @@ Assumes all speakers are in one group.
 * "Sonos what song is playing"
 
 ## Credits 
-Wally Fort
+@fortwally
 
 
 
