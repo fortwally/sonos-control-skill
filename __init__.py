@@ -53,7 +53,7 @@ class SonosControl(MycroftSkill):
         coord = self.findspeakers()
         if coord == "":
             LOGGER.debug("Did not find any Sonos speakers")
-            self.speak_dialog("sonos.nospeakers")
+            self.speak_dialog("sonos.nospeaker")
             return
         LOGGER.debug("Found Speakers")
         self.need_speakers = False
