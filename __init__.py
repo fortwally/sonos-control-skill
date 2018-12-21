@@ -148,6 +148,8 @@ class SonosControl(MycroftSkill):
         speakers = soco.discover()
         if speakers == None:
             return ""
+        if len(speakers) == 0:
+            return ""
         members = {}
         vol = {}
         for spk in speakers:
