@@ -53,6 +53,7 @@ class SonosControl(MycroftSkill):
         coord = self.findspeakers()
         if coord == "":
             LOGGER.debug("Did not find any Sonos speakers")
+            self.speak_dialog("sonos.nospeakers")
             return
         LOGGER.debug("Found Speakers")
         self.need_speakers = False
@@ -145,7 +146,7 @@ class SonosControl(MycroftSkill):
     # Find the speakers return the controler
     def findspeakers(self):
         speakers = soco.discover()
-        if len(speakers) == 0:
+        if speakers == None:
             return ""
         members = {}
         vol = {}
