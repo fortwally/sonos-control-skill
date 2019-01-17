@@ -1,0 +1,4 @@
+Das aktuelle Lied ist {{title}} aus dem Album {{album}} von {{artist}}
+es ist {{title}} aus dem Album {{album}} von {{artist}}
+Das aktuelle Lied ist {{title}} von {{artist}} aus dem Album {{album}}
+Das wäre {{title}} von {{artist}} aus dem Album {{album}}
